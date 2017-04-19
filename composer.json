@@ -1,8 +1,8 @@
 {
     "name": "lobtao/tp5helper",
     "description": "thinkphp5 helper",
-    "type": "thinkphp5-extension",
-    "keywords": ["thinkphp5","extension"," curl", "RESTful"],
+    "type": "thinkphp5-helper",
+    "keywords": ["thinkphp5","extension"," curl", "RESTful","helper"],
     "license": "MIT",
     "authors": [
         {

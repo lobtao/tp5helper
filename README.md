@@ -1,4 +1,4 @@
-thinkphp5-curl extension
+thinkphp5-helper
 ===================
 [![Latest Stable Version](https://poser.pugx.org/lobtao/thinkphp5-curl/v/stable)](https://packagist.org/packages/lobtao/thinkphp5-curl)
 [![Total Downloads](https://poser.pugx.org/lobtao/thinkphp5-curl/downloads)](https://packagist.org/packages/lobtao/thinkphp5-curl)
