@@ -12,7 +12,7 @@
  *
  */
 
-namespace lobtao\thinkphp5\curl;
+namespace lobtao\tp5helper;
 
 /**
  * cURL class
