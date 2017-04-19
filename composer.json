@@ -1,6 +1,6 @@
 {
-    "name": "lobtao/thinkphp5-curl",
-    "description": "Easy and nice cURL extension with RESTful support for Thinkphp5",
+    "name": "lobtao/tp5helper",
+    "description": "thinkphp5 helper",
     "type": "thinkphp5-extension",
     "keywords": ["thinkphp5","extension"," curl", "RESTful"],
     "license": "MIT",
@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "lobtao\\thinkphp5\\curl\\": ""
+            "lobtao\\tp5helper\\": ""
         }
     }
 }
