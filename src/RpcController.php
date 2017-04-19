@@ -87,12 +87,4 @@ class RpcController extends Controller {
         return $callback ? jsonp($result) : json($result);
     }
 
-    /**
-     * 测试
-     */
-    function test() {
-        echo THINK_VERSION;
-        return $this->fetch();
-    }
-
 }
