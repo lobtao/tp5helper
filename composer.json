@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "lobtao\\tp5helper\\": ""
+            "lobtao\\tp5helper\\": "src/"
         }
     }
 }
