@@ -33,13 +33,14 @@ class RpcController extends Controller {
         $this->callback = $request->param('callback');
 
         $result = $this->callFunc($this->func, $this->args);
-        return $this->ajaxReturn(
+        $response = $this->ajaxReturn(
             [
                 'data'  => $result,//返回数据
                 'retid' => 1,//调用成功标识
             ],
             $this->callback//jsonp调用时的回调函数
         );
+        $response->send();
     }
 
     /**
