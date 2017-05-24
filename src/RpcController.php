@@ -64,7 +64,7 @@ class RpcController extends Controller {
      * @return mixed
      * @throws \Exception
      */
-    public function callFunc($func, $args) {
+    private function callFunc($func, $args) {
         $params = explode('_', $func, 2);
         if (count($params) != 2) throw new \Exception('请求参数错误');
 
@@ -84,7 +84,7 @@ class RpcController extends Controller {
      * @param $callback
      * @return \think\response\Json|\think\response\Jsonp
      */
-    public function ajaxReturn($result, $callback) {
+    private function ajaxReturn($result, $callback) {
         return $callback ? jsonp($result) : json($result);
     }
 
