@@ -14,6 +14,9 @@
         "ext-curl": "*"
     },
     "autoload": {
+        "files": [
+            "src/Helper.php"
+        ],
         "psr-4": {
             "lobtao\\tp5helper\\": "src/"
         }
