@@ -139,4 +139,69 @@ switch ($curl->responseCode) {
 //list response headers
 var_dump($curl->responseHeaders);
 ```
-Support Thinkphp5
+
+RpcController.php  RPC远程调用示例
+-----
+ServiceController.php 服务提供接口
+
+```php
+namespace app\index\controller;
+
+use lobtao\tp5helper\RpcController;
+use think\Session;
+
+class ServiceController extends RpcController {
+
+    function index() {
+        $this->handle('app\\service\\', function ($func, $params) {
+            if (in_array(strtolower($func), ['user_login', 'user_logout'])) //登录方法不判断
+                return;
+
+            if(!Session::get('user')){
+                throw new \Exception('尚未登录，不能访问');
+            }
+        });
+    }
+}
+```
+
+UserService.php 服务类
+
+```php
+namespace app\service;
+
+
+use think\Session;
+
+class UserService {
+    function login(){
+        Session::set('user', ['name'=>'远思']);
+    }
+
+    function logout(){
+        Session::delete('user');
+        Session::destroy();
+    }
+
+    function test(){
+        return '恭喜，你可以正常访问此方法';
+    }
+}
+```
+
+示例
+```javascript
+
+client.invoke('user_login',[]).then(function(ret){
+  console.log(ret);
+});
+
+client.invoke('user_test',[]).then(function(ret){
+  console.log(ret);
+});
+
+client.invoke('user_logout',[]).then(function(ret){
+  console.log(ret);
+});
+
+```
