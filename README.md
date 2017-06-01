@@ -279,7 +279,7 @@ var client = require('client.js');
 
 client.invoke('user_login', [{
     name:'用户名',
-    password:'用户名',
+    password:'密码',
 }], function (ret) {
     console.log(ret);
 });
