@@ -238,10 +238,7 @@ client.invoke('user_logout',[{
 小程序调用
 client.js
 ```javascript
-var baseUrl = 'http://localhost/testpro/index.php/index/service/index';//服务控制类地址
-var serviceUrl = baseUrl + '/rpc/index';//rpc服务地址
-var upfileUrl = baseUrl + '/file/up';//文件上传地址
-var upfilesUrl = baseUrl + '/file/ups';//文件上传地址
+var serviceUrl = 'http://localhost/testpro/index.php/index/service/index';//服务控制类地址
 
 function invoke(func, args, callback) {
     wx.request({
@@ -256,30 +253,23 @@ function invoke(func, args, callback) {
         dataType: 'json',
         method: 'POST',
         success: function (ret) {
-            //console.log('request返回值：', ret);
             if (ret.data.retid == 1) {
                 callback(ret.data.data);
             } else {
                 wx.showModal({
                     showCancel: false,
                     confirmColor: '#ea644a',
-                    //content: typeof ret.data == 'string' ? ret.data : func + ': ' + ret.data.retmsg,
                     content: typeof ret.data == 'string' ? ret.data : ret.data.retmsg,
                 });
             }
         },
         complete:function(){
-            // wx.hideLoading();
-            // wx.hideToast();
-            // wx.hideNavigationBarLoading();
         },
     })
 }
 
 module.exports = {
-    invoke: invoke,
-    upfileUrl: upfileUrl,
-    upfilesUrl:upfilesUrl
+    invoke: invoke
 }
 ```
 
