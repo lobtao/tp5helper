@@ -207,7 +207,7 @@ function client(baseUrl){
 }
 ```
 
-js调用后端PHP服务示例
+js调用后端PHP服务类示例
 ```javascript
 
 var client = client("http://localhost/testpro/index.php/index/service/index");//服务控制类地址
