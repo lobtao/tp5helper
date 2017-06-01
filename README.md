@@ -1,38 +1,5 @@
-thinkphp5-helper
-===================
-[![Latest Stable Version](https://poser.pugx.org/lobtao/thinkphp5-curl/v/stable)](https://packagist.org/packages/lobtao/thinkphp5-curl)
-[![Total Downloads](https://poser.pugx.org/lobtao/thinkphp5-curl/downloads)](https://packagist.org/packages/lobtao/thinkphp5-curl)
-[![License](https://poser.pugx.org/lobtao/thinkphp5-curl/license)](https://packagist.org/packages/lobtao/thinkphp5-curl)
-                   
-Easy working cURL extension for thinkphp5, including RESTful support:
-
- - POST
- - GET
- - HEAD
- - PUT
- - PATCH
- - DELETE
-
-Requirements
-------------
-- PHP 5.4+
-- Curl and php-curl installed
-
-
-Installation
-------------
-
-The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
-
-```bash
-php composer.phar require --prefer-dist lobtao/thinkphp5-curl "*"
-```
-
-
-Usage
+Curl.php 使用示例
 -----
-
-Once the extension is installed, simply use it in your code. The following example shows you how to handling a simple GET Request. 
 
 ```php
 use lobtao\thinkphp5\curl;
@@ -142,7 +109,7 @@ var_dump($curl->responseHeaders);
 
 RpcController.php  RPC远程调用示例
 -----
-ServiceController.php 服务提供接口
+ServiceController.php 服务控制器类
 
 ```php
 namespace app\index\controller;
@@ -189,8 +156,64 @@ class UserService {
 }
 ```
 
+server.js
+```javascript
+function client(baseUrl){
+    var client = {
+        ajax: function (func, args, dataType) {
+            var _this = this;
+            var def = $.Deferred();
+            $.ajax({
+                type: "POST",
+                url: baseUrl,
+                data: {f: func, p: JSON.stringify(args)},
+                success: function (ret) {
+                    if (ret.retid == 0) {
+                        if (_this.onerror) {
+                            _this.onerror(ret.retmsg)
+                        }
+                        def.reject(ret.retmsg);
+                    } else {
+
+                        def.resolve(ret.data);
+                    }
+                },
+                dataType: dataType
+            });
+            return def;
+        },
+        onerror: null,
+        invoke: function (func, args, callback) {
+            var promise = this.ajax(func, args, 'json');
+            if (callback) {
+                promise.then(callback);
+            }
+            return promise;
+        },
+        invokep: function (func, args, callback) {
+            var promise = this.ajax(func, args, 'jsonp');
+            if (callback) {
+                promise.then(callback);
+            }
+            return promise;
+        }
+    };
+    //全局异常处理
+    client.onerror = function (err) {
+        alert(err);
+    };
+
+    return client;
+}
+```
+
 示例
 ```javascript
+
+var client = client("http://localhost/testpro/index.php/index/service/index");//服务控制类地址
+client.invoke('test_hello',[]).then(function(ret){
+    console.log(ret)
+});
 
 client.invoke('user_login',[]).then(function(ret){
   console.log(ret);
