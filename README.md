@@ -107,7 +107,7 @@ switch ($curl->responseCode) {
 var_dump($curl->responseHeaders);
 ```
 
-RpcController.php  RPC远程调用示例
+RpcController.php 远程调用示例
 -----
 ServiceController.php 服务控制器类
 
@@ -211,6 +211,7 @@ function client(baseUrl){
 ```javascript
 
 var client = client("http://localhost/testpro/index.php/index/service/index");//服务控制类地址
+
 client.invoke('test_hello',[]).then(function(ret){
     console.log(ret)
 });
