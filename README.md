@@ -156,7 +156,7 @@ class UserService {
 }
 ```
 
-server.js 依赖jquery.js
+js端调用server.js库 依赖jquery.js
 ```javascript
 function client(baseUrl){
     var client = {
@@ -235,8 +235,7 @@ client.invoke('user_logout',[{
 
 ```
 
-小程序调用
-client.js
+小程序调用 client.js 库
 ```javascript
 var serviceUrl = 'http://localhost/testpro/index.php/index/service/index';//服务控制类地址
 
