@@ -238,7 +238,7 @@ client.invoke('user_logout',[{
 小程序调用
 client.js
 ```javascript
-var baseUrl = 'https://xcx.go2carcare.com/index.php';//远程网址
+var baseUrl = 'http://localhost/testpro/index.php/index/service/index';//服务控制类地址
 var serviceUrl = baseUrl + '/rpc/index';//rpc服务地址
 var upfileUrl = baseUrl + '/file/up';//文件上传地址
 var upfilesUrl = baseUrl + '/file/ups';//文件上传地址
