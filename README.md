@@ -156,7 +156,7 @@ class UserService {
 }
 ```
 
-server.js
+server.js 依赖jquery.js
 ```javascript
 function client(baseUrl){
     var client = {
