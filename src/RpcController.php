@@ -16,21 +16,28 @@ class RpcController extends Controller {
      * @return string|\think\response\Json|\think\response\Jsonp
      * @throws \Exception
      */
-    public function handle($namespace) {
+    public function handle($namespace,$filter=null) {
         $this->namespace = $namespace;
 
         $request = $this->request;
         if ($request->isGet()) return 'API服务接口';
 
+        //异常拦截
         error_reporting(E_ERROR);
         set_exception_handler([$this, "exception_handler"]);
 
         $this->func = $request->param('f');
         $this->args = $request->param('p', []);
+
         if (gettype($this->args) == 'string') {//微信小程序特别设置；浏览器提交过来自动转换
             $this->args = json_decode($this->args, true);
         }
         $this->callback = $request->param('callback');
+
+        //过滤处理
+        if($filter){
+            call_user_func_array($filter, [$this->func,$this->args]);
+        }
 
         $result = $this->callFunc($this->func, $this->args);
         $response = $this->ajaxReturn(
