@@ -141,11 +141,11 @@ namespace app\service;
 use think\Session;
 
 class UserService {
-    function login(){
+    function login($params){
         Session::set('user', ['name'=>'远思']);
     }
 
-    function logout(){
+    function logout($params){
         Session::delete('user');
         Session::destroy();
     }
@@ -207,7 +207,7 @@ function client(baseUrl){
 }
 ```
 
-js调用后端PHP服务类示例
+js调用后端PHP服务类示例，先引入server.js
 ```javascript
 
 var client = client("http://localhost/testpro/index.php/index/service/index");//服务控制类地址
@@ -216,7 +216,10 @@ client.invoke('test_hello',[]).then(function(ret){
     console.log(ret)
 });
 
-client.invoke('user_login',[]).then(function(ret){
+client.invoke('user_login',[{
+    name:'用户名',
+    password:'密码',
+}]).then(function(ret){
   console.log(ret);
 });
 
@@ -224,8 +227,81 @@ client.invoke('user_test',[]).then(function(ret){
   console.log(ret);
 });
 
-client.invoke('user_logout',[]).then(function(ret){
+client.invoke('user_logout',[{
+     name:'用户名',
+ }]).then(function(ret){
   console.log(ret);
 });
 
+```
+
+小程序调用
+client.js
+```javascript
+var baseUrl = 'https://xcx.go2carcare.com/index.php';//远程网址
+var serviceUrl = baseUrl + '/rpc/index';//rpc服务地址
+var upfileUrl = baseUrl + '/file/up';//文件上传地址
+var upfilesUrl = baseUrl + '/file/ups';//文件上传地址
+
+function invoke(func, args, callback) {
+    wx.request({
+        url: serviceUrl,
+        data: {
+            f: func,
+            p: JSON.stringify(args)
+        },
+        header: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        dataType: 'json',
+        method: 'POST',
+        success: function (ret) {
+            //console.log('request返回值：', ret);
+            if (ret.data.retid == 1) {
+                callback(ret.data.data);
+            } else {
+                wx.showModal({
+                    showCancel: false,
+                    confirmColor: '#ea644a',
+                    //content: typeof ret.data == 'string' ? ret.data : func + ': ' + ret.data.retmsg,
+                    content: typeof ret.data == 'string' ? ret.data : ret.data.retmsg,
+                });
+            }
+        },
+        complete:function(){
+            // wx.hideLoading();
+            // wx.hideToast();
+            // wx.hideNavigationBarLoading();
+        },
+    })
+}
+
+module.exports = {
+    invoke: invoke,
+    upfileUrl: upfileUrl,
+    upfilesUrl:upfilesUrl
+}
+```
+
+调用示例
+```javascript
+
+var client = require('client.js');
+
+client.invoke('user_login', [{
+    name:'用户名',
+    password:'用户名',
+}], function (ret) {
+    console.log(ret);
+});
+
+client.invoke('user_test', [], function (ret) {
+    console.log(ret);
+});
+
+client.invoke('user_logout', [{
+    name:'用户名',
+}], function (ret) {
+    console.log(ret);
+});
 ```
