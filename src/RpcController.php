@@ -20,7 +20,7 @@ class RpcController extends Controller {
         $this->namespace = $namespace;
 
         $request = $this->request;
-        if ($request->isGet()) return 'API服务接口';
+        //if ($request->isGet()) return 'API服务接口';
 
         //异常拦截
         error_reporting(E_ERROR);
