@@ -84,14 +84,14 @@ class RpcController extends Controller
      */
     private function callFunc($func, $args) {
         $params = explode('_', $func, 2);
-        if (count($params) != 2) throw new \Exception('请求参数错误');
+        if (count($params) != 2) throw new RpcException('请求参数错误');
 
         $svname = ucfirst($params[0]);
         $classname = $this->namespace . $svname . 'Service';
         $funcname = $params[1];
-        if (!class_exists($classname)) throw new \Exception('类' . $svname . '不存在！！！');
+        if (!class_exists($classname)) throw new RpcException('类' . $svname . '不存在！！！');
         $object = new $classname();
-        if (!method_exists($object, $funcname)) throw new \Exception($svname . '中不存在' . $funcname . '方法');
+        if (!method_exists($object, $funcname)) throw new RpcException($svname . '中不存在' . $funcname . '方法');
         $data = call_user_func_array([$object, $funcname], $args);
         return $data;
     }
