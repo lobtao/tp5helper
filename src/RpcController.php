@@ -15,8 +15,8 @@ class RpcController extends Controller
 
     /**
      * 主方法
-     * @return string|\think\response\Json|\think\response\Jsonp
-     * @throws \Exception
+     * @param $namespace
+     * @param null $filter
      */
     public function handle($namespace, $filter = null) {
         $this->namespace = $namespace;
@@ -54,8 +54,7 @@ class RpcController extends Controller
 
     /**
      * 异常拦截回复
-     * @param \Exception $exception
-     * @return String
+     * @param $exception
      */
     function exception_handler($exception) {
         if ($exception instanceof RpcException) {
@@ -80,7 +79,6 @@ class RpcController extends Controller
      * @param $func
      * @param $args
      * @return mixed
-     * @throws \Exception
      */
     private function callFunc($func, $args) {
         $params = explode('_', $func, 2);
