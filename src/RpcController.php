@@ -65,11 +65,11 @@ class RpcController extends Controller
                 'retmsg' => $errMsg,
             ], $this->callback);
             $response->send();
-        } else {
-            Log::error('File: '.$exception->getFile());
-            Log::error('Line: '.$exception->getLine().' 行');
-            Log::error('Message: '.$exception->getMessage());
         }
+        Log::error('Class: ' . get_class($exception));
+        Log::error('File: ' . $exception->getFile());
+        Log::error('Line: ' . $exception->getLine() . ' 行');
+        Log::error('Message: ' . $exception->getMessage());
     }
 
     /**
