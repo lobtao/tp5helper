@@ -41,7 +41,7 @@ if (!function_exists('V')) {
         if (!$validate->scene($scenario)->check($params)) {
             $msg = $validate->getError();
 
-            if ($showException) throw new \Exception($msg);
+            if ($showException) throw new \lobtao\tp5helper\RpcException($msg);
         }
         return $msg;
     }
