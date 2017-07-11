@@ -2,9 +2,11 @@
 namespace lobtao\tp5helper;
 
 use think\Controller;
+use think\Log;
 use think\Response;
 
-class RpcController extends Controller {
+class RpcController extends Controller
+{
 
     private $func;
     private $args;
@@ -16,7 +18,7 @@ class RpcController extends Controller {
      * @return string|\think\response\Json|\think\response\Jsonp
      * @throws \Exception
      */
-    public function handle($namespace,$filter=null) {
+    public function handle($namespace, $filter = null) {
         $this->namespace = $namespace;
 
         $request = $this->request;
@@ -35,8 +37,8 @@ class RpcController extends Controller {
         $this->callback = $request->param('callback');
 
         //过滤处理
-        if($filter){
-            call_user_func_array($filter, [$this->func,$this->args]);
+        if ($filter) {
+            call_user_func_array($filter, [$this->func, $this->args]);
         }
 
         $result = $this->callFunc($this->func, $this->args);
@@ -56,12 +58,18 @@ class RpcController extends Controller {
      * @return String
      */
     function exception_handler($exception) {
-        $errMsg = $exception->getMessage();
-        $response = $this->ajaxReturn([
-            'retid'  => 0,
-            'retmsg' => $errMsg,
-        ], $this->callback);
-        $response->send();
+        if ($exception instanceof RpcException) {
+            $errMsg = $exception->getMessage();
+            $response = $this->ajaxReturn([
+                'retid'  => 0,
+                'retmsg' => $errMsg,
+            ], $this->callback);
+            $response->send();
+        } else {
+            Log::error('File: '.$exception->getFile());
+            Log::error('Line: '.$exception->getLine().' 行');
+            Log::error('Message: '.$exception->getMessage());
+        }
     }
 
     /**
