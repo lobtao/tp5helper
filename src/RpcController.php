@@ -60,16 +60,19 @@ class RpcController extends Controller
     function exception_handler($exception) {
         if ($exception instanceof RpcException) {
             $errMsg = $exception->getMessage();
-            $response = $this->ajaxReturn([
-                'retid'  => 0,
-                'retmsg' => $errMsg,
-            ], $this->callback);
-            $response->send();
+        } else {
+            $errMsg = '系统异常';
         }
+        $response = $this->ajaxReturn([
+            'retid'  => 0,
+            'retmsg' => $errMsg,
+        ], $this->callback);
+        $response->send();
+
         Log::error('Class: ' . get_class($exception));
         Log::error('File: ' . $exception->getFile());
         Log::error('Line: ' . $exception->getLine() . ' 行');
-        Log::error('Message: ' . $exception->getMessage());
+        Log::error('系统异常: ' . $exception->getMessage());
     }
 
     /**
