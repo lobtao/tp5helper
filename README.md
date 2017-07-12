@@ -115,6 +115,7 @@ ServiceController.php 服务控制器类
 namespace app\index\controller;
 
 use lobtao\tp5helper\RpcController;
+use lobtao\tp5helper\RpcException;
 use think\Session;
 
 class ServiceController extends RpcController {
