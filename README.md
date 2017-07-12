@@ -125,7 +125,7 @@ class ServiceController extends RpcController {
                 return;
 
             if(!Session::get('user')){
-                throw new \Exception('尚未登录，不能访问');
+                throw new RpcException('尚未登录，不能访问');
             }
         });
     }
