@@ -8,6 +8,7 @@
 
 namespace lobtao\tp5helper;
 
+use think\Log;
 use Workerman\Connection\TcpConnection;
 
 class WorkerRpc
@@ -31,45 +32,54 @@ class WorkerRpc
         $this->namespace = $namespace;
         //if ($request->isGet()) return 'API服务接口';
 
-        //异常拦截
-//        error_reporting(E_ERROR);
-//        set_RpcException_handler([$this, "RpcException_handler"]);
+        //异常捕获
+        try {
+            $this->func = isset($_REQUEST['f']) ? $_REQUEST['f'] : '';
+            $this->args = isset($_REQUEST['p']) ? $_REQUEST['p'] : [];
 
-        $this->func = isset($_GET['f']) ? $_GET['f'] : '';
-        $this->args = isset($_GET['p']) ? $_GET['p'] : [];
+            if (gettype($this->args) == 'string') {//微信小程序特别设置；浏览器提交过来自动转换
+                $this->args = json_decode($this->args, true);
+            }
+            $this->callback = isset($_REQUEST['callback']) ? $_REQUEST['callback'] : '';
 
-        if (gettype($this->args) == 'string') {//微信小程序特别设置；浏览器提交过来自动转换
-            $this->args = json_decode($this->args, true);
+            //过滤处理
+            if ($filter) {
+                call_user_func_array($filter, [$this->func, $this->args]);
+            }
+            $result = $this->callFunc($this->func, $this->args);
+
+            $response = $this->ajaxReturn(
+                [
+                    'data'  => $result,//返回数据
+                    'retid' => 1,//调用成功标识
+                ],
+                $this->callback//jsonp调用时的回调函数
+            );
+            $this->con->send($response);
+        }catch(\Exception $ex){
+            $this->exception_handler($ex);
         }
-        $this->callback = isset($_GET['callback']) ? $_GET['callback'] : '';
-
-        //过滤处理
-        if ($filter) {
-            call_user_func_array($filter, [$this->func, $this->args]);
-        }
-        $result = $this->callFunc($this->func, $this->args);
-        $response = $this->ajaxReturn(
-            [
-                'data'  => $result,//返回数据
-                'retid' => 1,//调用成功标识
-            ],
-            $this->callback//jsonp调用时的回调函数
-        );
-        $this->con->send($response);
     }
 
     /**
      * 异常拦截回复
-     * @param RpcException $RpcException
+     * @param RpcException $exception
      * @return String
      */
-    function RpcException_handler($RpcException) {
-        $errMsg = $RpcException->getMessage();
+    function exception_handler($exception) {
+        if ($exception instanceof RpcException) {
+            $errMsg = $exception->getMessage();
+        } else {
+            $errMsg = '系统异常';
+        }
         $response = $this->ajaxReturn([
             'retid'  => 0,
             'retmsg' => $errMsg,
         ], $this->callback);
         $this->con->send($response);
+
+        $msg = sprintf("Class: %s\nFile: %s\nLine: %s\n异常描述: %s\n",get_class($exception),$exception->getFile(),$exception->getLine(), $exception->getMessage());
+        Log::error($msg);
     }
 
     /**
@@ -98,9 +108,6 @@ class WorkerRpc
 
         if (!method_exists($object, $funcname)) throw new RpcException($svname . '中不存在' . $funcname . '方法');
 
-        //if(!$this->is_assoc($args)) throw new RpcException('参数格式错误！');//必须为序号数组嵌入一个对象[{"name":"xiao"}]
-//        $data = $object->$funcname($args[0]);
-
         $data = call_user_func_array([$object, $funcname], $args);
 
         return $data;
@@ -113,8 +120,8 @@ class WorkerRpc
      * @return \think\response\Json|\think\response\Jsonp
      */
     private function ajaxReturn($result, $callback) {
-        $data = json_encode($result);
-        return $callback ? sprintf('%s(%s)',$callback,$data) : $data;
+        $data = json_encode($result,JSON_UNESCAPED_UNICODE);
+        return $callback ? sprintf('%s(%s)', $callback, $data) : $data;
     }
 
     /**

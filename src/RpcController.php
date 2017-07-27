@@ -68,10 +68,8 @@ class RpcController extends Controller
         ], $this->callback);
         $response->send();
 
-        Log::error('Class: ' . get_class($exception));
-        Log::error('File: ' . $exception->getFile());
-        Log::error('Line: ' . $exception->getLine() . ' 行');
-        Log::error('系统异常: ' . $exception->getMessage());
+        $msg = sprintf("Class: %s\nFile: %s\nLine: %s\n异常描述: %s\n",get_class($exception),$exception->getFile(),$exception->getLine(), $exception->getMessage());
+        Log::error($msg);
     }
 
     /**
