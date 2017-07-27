@@ -300,3 +300,58 @@ client.invoke('user_logout', [{
     console.log(ret);
 });
 ```
+
+Workerman 提供Rpc服务
+-----
+ServiceController.php 服务控制器类
+
+```php
+/**
+ * Created by lobtao.
+ * User: Administrator
+ * Date: 2017-7-26
+ * Time: 16:51
+ * workerman的性能是apache的239倍
+ */
+
+namespace app\admin\command;
+
+use lobtao\tp5helper\WorkerRpc;
+use think\console\Command;
+use think\console\Input;
+use think\console\Output;
+use Workerman\Connection\TcpConnection;
+use Workerman\Protocols\Http;
+use Workerman\Worker;
+
+class Api extends Command
+{
+    protected function configure() {
+        $this->setName('api')
+            ->addArgument('args')
+            ->addArgument('daemon')
+            ->setDescription('api接口调用');
+    }
+
+    protected function execute(Input $input, Output $output) {
+        global $argv;
+        array_shift($argv);//弹出第一个参数
+        if ($argv[1] == 'startd') {
+            $argv[1] = 'start';
+            $argv[2] = '-d';
+        }
+
+        $worker->onMessage = function (TcpConnection $con, $data) {
+            if($data['server']['REQUEST_URI'] == '/favicon.ico') return;//忽略favicon.ico请求
+            Http::header('Access-Control-Allow-Origin:*');//允许前端跨域请求
+            $rpc = new WorkerRpc();
+            $rpc->handle($con, 'app\\service\\');
+        };
+        Worker::runAll();
+    }
+}
+
+./think api start
+./think api startd
+```
+
