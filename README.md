@@ -351,7 +351,7 @@ class Api extends Command
     }
 }
 
-./think api start
-./think api startd
 ```
 
+./think api start   //启动调试模式
+./think api startd  //启动后台运行
