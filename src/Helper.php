@@ -46,3 +46,23 @@ if (!function_exists('V')) {
         return $msg;
     }
 }
+
+if (!function_exists('getValue')) {
+    /**
+     * 获取表单formData里字段值
+     * @param $array
+     * @param $key
+     * @param int $type
+     * @return int|string
+     */
+    function getValue($array, $key, $type = 0) {
+        switch ($type) {
+            case 0://字符串
+                return array_key_exists($key, $array) ? $array[$key] : '';
+                break;
+            case 1://整数、浮点数
+                return array_key_exists($key, $array) ? $array[$key] : 0;
+                break;
+        }
+    }
+}
