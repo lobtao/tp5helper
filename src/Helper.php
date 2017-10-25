@@ -65,6 +65,7 @@ if (!function_exists('getValue')) {
                 break;
         }
     }
+<<<<<<< HEAD
 }
 
 if (!function_exists('createUrl')) {
@@ -104,4 +105,6 @@ if (!function_exists('layout')) {
             return $response;
         }
     }
+=======
+>>>>>>> ff01650973c0c51f48e4f7b18e79c5dc5b9fe4ed
 }

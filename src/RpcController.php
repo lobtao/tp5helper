@@ -1,11 +1,10 @@
 <?php
 namespace lobtao\tp5helper;
 
-use think\Controller;
 use think\Log;
 use think\Response;
 
-class RpcController extends Controller
+class RpcController
 {
 
     private $func;
@@ -21,7 +20,7 @@ class RpcController extends Controller
     public function handle($namespace, $filter = null) {
         $this->namespace = $namespace;
 
-        $request = $this->request;
+        $request = request();
         //if ($request->isGet()) return 'API服务接口';
 
         //异常拦截
