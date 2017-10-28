@@ -92,16 +92,12 @@ if (!function_exists('layout')) {
      * @return $this|\think\Response|\think\response\Json|\think\response\Jsonp|\think\response\Redirect|\think\response\View|\think\response\Xml
      */
     function layout($template = '', $vars = [], $replace = [], $code = 200) {
-        //渲染子页面
-        $response = \think\Response::create($template, 'view', $code);
-        $response->replace($replace)->assign($vars);
-        //渲染母板页
         if (config('template.layout_on')) {
             return \think\Response::create('./' . config('template.layout_name'), 'view', $code)->replace([
-                config('template.layout_item') => $response->getContent()
+                config('template.layout_item') => (new \think\View(config('template')))->fetch($template, $vars,$replace)
             ]);
         } else {
-            return $response;
+            return \think\Response::create($template, 'view', $code);
         }
     }
 }
