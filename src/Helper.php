@@ -75,9 +75,9 @@ if (!function_exists('createUrl')) {
      */
     function createUrl($router) {
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'yssoft'))//需要在apicloud config.xml里配置<preference name="userAgent" value="yssoft" />
-            return sprintf("func_openWin('%s','%s')", url($router, '', false, true), config('title'));
+            return sprintf("func_openWin('%s','%s')", url($router, '', true, true), config('title'));
         else
-            return sprintf("window.location.href='%s'", url($router, '', false, true));
+            return sprintf("window.location.href='%s'", url($router, '', true, true));
 
     }
 }
