@@ -77,7 +77,7 @@ if (!function_exists('createUrl')) {
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'yssoft'))//需要在apicloud config.xml里配置<preference name="userAgent" value="yssoft" />
             return sprintf("func_openWin('%s','%s')", url($router, '', false, true), config('title'));
         else
-            return url($router, '', false, true);
+            return sprintf("window.location.href='%s'", url($router, '', false, true));
 
     }
 }
@@ -94,7 +94,7 @@ if (!function_exists('layout')) {
     function layout($template = '', $vars = [], $replace = [], $code = 200) {
         if (config('template.layout_on')) {
             return \think\Response::create('./' . config('template.layout_name'), 'view', $code)->replace([
-                config('template.layout_item') => (new \think\View(config('template')))->fetch($template, $vars,$replace)
+                config('template.layout_item') => (new \think\View(config('template')))->fetch($template, $vars, $replace)
             ]);
         } else {
             return \think\Response::create($template, 'view', $code);
