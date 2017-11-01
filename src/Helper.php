@@ -93,9 +93,10 @@ if (!function_exists('layout')) {
      */
     function layout($template = '', $vars = [], $replace = [], $code = 200) {
         if (config('template.layout_on')) {
-            return \think\Response::create('./' . config('template.layout_name'), 'view', $code)->replace([
-                config('template.layout_item') => (new \think\View(config('template')))->fetch($template, $vars, $replace)
+            $replace = array_merge($replace,[
+                config('template.layout_item') => \think\View::instance(config('template'))->fetch($template, $vars, $replace)
             ]);
+            return \think\Response::create('./' . config('template.layout_name'), 'view', $code)->replace($replace);
         } else {
             return \think\Response::create($template, 'view', $code);
         }
