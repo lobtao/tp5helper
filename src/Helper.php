@@ -74,11 +74,18 @@ if (!function_exists('createUrl')) {
      * @return string
      */
     function createUrl($router) {
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'yssoft'))//需要在apicloud config.xml里配置<preference name="userAgent" value="yssoft" />
-            return sprintf("func_openWin('%s','%s')", url($router, '', true, true), config('title'));
+        $webview_type = request()->param('WEBVIEW_TYPE');
+        $url = url($router, ['WEBVIEW_TYPE'=>$webview_type], true, true);
+        //1、小程序
+        if($webview_type == 'miniprogram')
+            //公众号和小程序webview里都有MicroMessenger 安卓里有miniprogram iphone里没有miniprogram，所以增加参数WEBVIEW_TYPE区分是小程序里webview
+            return "wx.miniProgram.navigateTo({url: '/pages/webview/webview?url={$url}'})";
+        //2、APP
+        else if (strpos($_SERVER['HTTP_USER_AGENT'], 'yssoft'))//需要在apicloud config.xml里配置<preference name="userAgent" value="yssoft" />
+            return sprintf("func_openWin('%s','%s')", $url, config('title'));
+        //3、wap和公众号
         else
-            return sprintf("window.location.href='%s'", url($router, '', true, true));
-
+            return sprintf("window.location.href='%s'", $url);
     }
 }
 
