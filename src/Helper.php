@@ -109,7 +109,7 @@ if (!function_exists('layout')) {
         }
     }
 }
-if (!function_exists('layout')) {
+if (!function_exists('client_ip')) {
     function client_ip() {
         $unknown = 'unknown';
         $ip = '';
