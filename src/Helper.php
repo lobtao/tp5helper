@@ -75,9 +75,9 @@ if (!function_exists('createUrl')) {
      */
     function createUrl($router) {
         $webview_type = request()->param('WEBVIEW_TYPE');
-        $url = url($router, ['WEBVIEW_TYPE'=>$webview_type], true, true);
+        $url = url($router, ['WEBVIEW_TYPE' => $webview_type], true, true);
         //1、小程序
-        if($webview_type == 'miniprogram')
+        if ($webview_type == 'miniprogram')
             //公众号和小程序webview里都有MicroMessenger 安卓里有miniprogram iphone里没有miniprogram，所以增加参数WEBVIEW_TYPE区分是小程序里webview
             return "wx.miniProgram.navigateTo({url: '/pages/webview/webview?url={$url}'})";
         //2、APP
@@ -100,12 +100,30 @@ if (!function_exists('layout')) {
      */
     function layout($template = '', $vars = [], $replace = [], $code = 200) {
         if (config('template.layout_on')) {
-            $replace = array_merge($replace,[
+            $replace = array_merge($replace, [
                 config('template.layout_item') => \think\View::instance(config('template'))->fetch($template, $vars, $replace)
             ]);
             return \think\Response::create('./' . config('template.layout_name'), 'view', $code)->replace($replace);
         } else {
             return \think\Response::create($template, 'view', $code);
         }
+    }
+}
+if (!function_exists('layout')) {
+    function client_ip() {
+        $unknown = 'unknown';
+        $ip = '';
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR'] && strcasecmp($_SERVER['HTTP_X_FORWARDED_FOR'], $unknown)) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], $unknown)) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        /*
+        处理多层代理的情况
+        或者使用正则方式：$ip = preg_match("/[\d\.]{7,15}/", $ip, $matches) ? $matches[0] : $unknown;
+        */
+        if (false !== strpos($ip, ','))
+            $ip = reset(explode(',', $ip));
+        return $ip;
     }
 }
