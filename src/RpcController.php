@@ -65,10 +65,14 @@ class RpcController
             'retid'  => 0,
             'retmsg' => $errMsg,
         ], $this->callback);
+        
+        $msg = sprintf("Trace:%s\nClass: %s\nFile: %s\nLine: %s\n异常描述: %s", $exception->getTraceAsString(),get_class($exception),$exception->getFile(),$exception->getLine(), $exception->getMessage());
+        if( class_exists('\think\facade\Log') ) {
+            \think\facade\Log::error($msg);
+        }else{
+            \think\Log::error($msg);
+        }
         $response->send();
-
-        $msg = sprintf("Class: %s\nFile: %s\nLine: %s\n异常描述: %s\n",get_class($exception),$exception->getFile(),$exception->getLine(), $exception->getMessage());
-        Log::error($msg);
     }
 
     /**
