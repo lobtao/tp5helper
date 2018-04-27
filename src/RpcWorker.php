@@ -1,50 +1,54 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2017-7-26
+ * Time: 19:07
+ */
+
 namespace lobtao\tp5helper;
 
 use think\Log;
-use think\Response;
+use Workerman\Connection\TcpConnection;
 
-class RpcController extends BaseRpc{
+class RpcWorker extends BaseRpc
+{
 
     /**
      * 主方法
-     * @param $namespace
-     * @param null $filter
-     * @return \think\response\Json|\think\response\Jsonp
+     * @return string|\think\response\Json|\think\response\Jsonp
+     * @throws RpcException
      */
-    public function handle($namespace, $filter = null) {
-
+    public function handle( $namespace, $filter = null) {
         $this->namespace = $namespace;
-
-        $request = request();
         //if ($request->isGet()) return 'API服务接口';
 
-        //异常拦截
+        //异常捕获
         try {
-            $this->func = $request->param('f');
-            $this->args = $request->param('p', []);
+            $this->func = isset($_REQUEST['f']) ? $_REQUEST['f'] : '';
+            $this->args = isset($_REQUEST['p']) ? $_REQUEST['p'] : [];
 
             if (gettype($this->args) == 'string') {//微信小程序特别设置；浏览器提交过来自动转换
                 $this->args = html_entity_decode($this->args);
                 $this->args = json_decode($this->args, true);
             }
-            $this->callback = $request->param('callback');
+            $this->callback = isset($_REQUEST['callback']) ? $_REQUEST['callback'] : '';
 
             //过滤处理
             if ($filter) {
                 call_user_func_array($filter, [$this->func, $this->args]);
             }
+            $result = $this->callFunc($this->func, $this->args);
 
-            $result   = $this->callFunc($this->func, $this->args);
-            $response = $this->ajaxReturn(
+            $data = $this->ajaxReturn(
                 [
                     'data'  => $result,//返回数据
                     'retid' => 1,//调用成功标识
                 ],
                 $this->callback//jsonp调用时的回调函数
             );
-            return $response;
-        } catch (\Exception $ex) {
+            return $data;
+        }catch(\Exception $ex){
             return $this->exception_handler($ex);
         }
     }
