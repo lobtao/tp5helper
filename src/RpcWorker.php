@@ -16,8 +16,9 @@ class RpcWorker extends BaseRpc
 
     /**
      * 主方法
-     * @return string|\think\response\Json|\think\response\Jsonp
-     * @throws RpcException
+     * @param $namespace
+     * @param null $filter
+     * @return String|\think\response\Json|\think\response\Jsonp
      */
     public function handle( $namespace, $filter = null) {
         $this->namespace = $namespace;
@@ -35,7 +36,7 @@ class RpcWorker extends BaseRpc
             $this->callback = isset($_REQUEST['callback']) ? $_REQUEST['callback'] : '';
 
             //过滤处理
-            if ($filter) {
+            if (isset($filter)) {
                 call_user_func_array($filter, [$this->func, $this->args]);
             }
             $result = $this->callFunc($this->func, $this->args);

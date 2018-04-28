@@ -31,7 +31,7 @@ class RpcController extends BaseRpc{
             $this->callback = $request->param('callback');
 
             //过滤处理
-            if ($filter) {
+            if (isset($filter)) {
                 call_user_func_array($filter, [$this->func, $this->args]);
             }
 
