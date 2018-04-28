@@ -26,7 +26,11 @@ abstract class BaseRpc {
         if ($exception instanceof RpcException) {
             $errMsg = $exception->getMessage();
         } else {
-            $errMsg = '系统异常';
+            if(config('showerror')){
+                $errMsg = $exception->getMessage();
+            }else{
+                $errMsg = '系统异常';
+            }
         }
         $data = $this->ajaxReturn([
             'retid'  => 0,
