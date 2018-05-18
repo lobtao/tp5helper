@@ -11,9 +11,8 @@ namespace lobtao\tp5helper;
 use PHPSocketIO\SocketIO;
 use Workerman\Worker;
 
-abstract class PHPSocketIO
-{
-    protected $io;
+abstract class PHPSocketIO {
+    public $io;
     protected $opts = [];
     protected $port = '9982';
 
