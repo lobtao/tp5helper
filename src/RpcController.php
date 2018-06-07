@@ -10,7 +10,7 @@ class RpcController extends BaseRpc{
      * 主方法
      * @param $namespace
      * @param null $filter
-     * @return \think\response\Json|\think\response\Jsonp
+     * @return string
      */
     public function handle($namespace, $filter = null) {
 

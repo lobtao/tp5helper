@@ -9,6 +9,7 @@ namespace lobtao\tp5helper;
 
 
 abstract class BaseRpc {
+
     protected $func;
     protected $args;
     protected $callback;
@@ -26,9 +27,9 @@ abstract class BaseRpc {
         if ($exception instanceof RpcException) {
             $errMsg = $exception->getMessage();
         } else {
-            if(config('showerror')){
+            if (config('showerror')) {
                 $errMsg = $exception->getMessage();
-            }else{
+            } else {
                 $errMsg = '系统异常';
             }
         }
@@ -41,7 +42,9 @@ abstract class BaseRpc {
         $msg = sprintf("Trace:%s\nClass: %s\nFile: %s\nLine: %s\n异常描述: %s", $exception->getTraceAsString(), get_class($exception), $exception->getFile(), $exception->getLine(), $exception->getMessage());
         if (class_exists('\think\facade\Log')) {
             \think\facade\Log::error($msg);
-        } else {
+        } else if (class_exists('\workermvc\Log')) {
+            \workermvc\Log::error($msg);
+        } else if (is_callable(['\think\Log', 'error'])) {
             \think\Log::error($msg);
         }
 
@@ -60,9 +63,9 @@ abstract class BaseRpc {
         $params = explode('_', $func, 2);
         if (count($params) != 2) throw new RpcException('请求参数错误');
 
-        $svname    = ucfirst($params[0]);
+        $svname = ucfirst($params[0]);
         $classname = $this->namespace . $svname . 'Service';
-        $funcname  = $params[1];
+        $funcname = $params[1];
         if (!class_exists($classname)) throw new RpcException('类' . $classname . '不存在！');
 
         $object = new $classname();
@@ -76,7 +79,7 @@ abstract class BaseRpc {
      * ajax返回
      * @param $result
      * @param $callback
-     * @return \think\response\Json|\think\response\Jsonp
+     * @return string
      */
     protected function ajaxReturn($result, $callback) {
 
