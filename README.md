@@ -2,7 +2,7 @@ Curl.php 使用示例
 -----
 
 ```php
-use lobtao\thinkphp5\curl;
+use lobtao\tp5helper\curl;
 $curl = new curl\Curl();
 
 //get http://example.com/
