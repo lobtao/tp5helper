@@ -72,19 +72,19 @@ class Curl
      * @var array HTTP-Status Code
      * Custom options holder
      */
-    protected $_options = [];
+    protected $_options = array();
 
     /**
      * @var array
      * Hold array of get params to send with the request
      */
-    protected $_getParams = [];
+    protected $_getParams = array();
 
     /**
      * @var array
      * Hold array of post params to send with the request
      */
-    protected $_postParams = [];
+    protected $_postParams = array();
 
     /**
      * @var resource|null
@@ -102,13 +102,13 @@ class Curl
      * @var array default curl options
      * Default curl options
      */
-    protected $_defaultOptions = [
+    protected $_defaultOptions = array(
         CURLOPT_USERAGENT      => 'thinkphp5-Curl-Agent',
         CURLOPT_TIMEOUT        => 30,
         CURLOPT_CONNECTTIMEOUT => 30,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_HEADER         => true,
-    ];
+    );
 
 
     // ############################################### class methods // ##############################################
@@ -325,7 +325,7 @@ class Curl
         if (is_array($headers)) {
 
             //init
-            $parsedHeader = [];
+            $parsedHeader = array();
 
             //parse header into right format key:value
             foreach ($headers as $header => $value) {
@@ -370,7 +370,7 @@ class Curl
     {
         //reset all options
         if (isset($this->_options)) {
-            $this->_options = [];
+            $this->_options = array();
         }
 
         return $this;
@@ -390,7 +390,7 @@ class Curl
 
         //reset all options
         if (isset($this->_options)) {
-            $this->_options = [];
+            $this->_options = array();
         }
 
         //reset response & status params
@@ -402,8 +402,8 @@ class Curl
         $this->responseLength = -1;
         $this->responseType = null;
         $this->errorText = null;
-        $this->_postParams = [];
-        $this->_getParams = [];
+        $this->_postParams = array();
+        $this->_getParams = array();
 
         return $this;
     }
@@ -449,7 +449,7 @@ class Curl
         } elseif ($this->_curl !== null && $opt !== null) {
             return curl_getinfo($this->_curl, $opt);
         } else {
-            return [];
+            return array();
         }
     }
 
@@ -585,7 +585,7 @@ class Curl
     protected function _extractCurlHeaders ($response)
     {
         //Init
-        $headers = [];
+        $headers = array();
         $headerText = substr($response, 0, strpos($response, "\r\n\r\n"));
 
         foreach (explode("\r\n", $headerText) as $i => $line) {
