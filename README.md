@@ -2,8 +2,8 @@ Curl.php 使用示例
 -----
 
 ```php
-use lobtao\tp5helper\curl;
-$curl = new curl\Curl();
+use lobtao\tp5helper\Curl;
+$curl = new Curl();
 
 //get http://example.com/
 $response = $curl->get('http://example.com/');
@@ -24,7 +24,7 @@ if ($curl->errorCode === null) {
 ```php
 // GET request with GET params
 // http://example.com/?key=value&scondKey=secondValue
-$curl = new curl\Curl();
+$curl = new Curl();
 $response = $curl->setGetParams([
         'key' => 'value',
         'secondKey' => 'secondValue'
@@ -35,7 +35,7 @@ $response = $curl->setGetParams([
 
 ```php
 // POST URL form-urlencoded 
-$curl = new curl\Curl();
+$curl = new Curl();
 $response = $curl->setPostParams([
         'key' => 'value',
         'secondKey' => 'secondValue'
@@ -45,7 +45,7 @@ $response = $curl->setPostParams([
 
 ```php
 // POST with special headers
-$curl = new curl\Curl();
+$curl = new Curl();
 $response = $curl->setPostParams([
         'key' => 'value',
         'secondKey' => 'secondValue'
@@ -59,7 +59,7 @@ $response = $curl->setPostParams([
 
 ```php
 // POST JSON with body string & special headers
-$curl = new curl\Curl();
+$curl = new Curl();
 
 $params = [
     'key' => 'value',
@@ -76,7 +76,7 @@ $response = $curl->setRequestBody(json_encode($params))
 
 ```php
 // Avanced POST request with curl options & error handling
-$curl = new curl\Curl();
+$curl = new Curl();
 
 $params = [
     'key' => 'value',
