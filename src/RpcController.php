@@ -25,7 +25,7 @@ class RpcController extends BaseRpc{
             $this->args = $request->param('p', []);
 
             if (gettype($this->args) == 'string') {//微信小程序特别设置；浏览器提交过来自动转换
-                $this->args = html_entity_decode($this->args);
+                //$this->args = html_entity_decode($this->args);//chrome端加上这个会报错
                 $this->args = json_decode($this->args, true);
             }
             $this->callback = $request->param('callback');
