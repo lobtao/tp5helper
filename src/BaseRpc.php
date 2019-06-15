@@ -83,8 +83,11 @@ abstract class BaseRpc {
      */
     protected function ajaxReturn($result, $callback) {
 
-        $data = json_encode($result, JSON_UNESCAPED_UNICODE);
-        return $callback ? sprintf('%s(%s)', $callback, $data) : $data;
+        // $data = json_encode($result, JSON_UNESCAPED_UNICODE);
+        // return $callback ? sprintf('%s(%s)', $callback, $data) : $data;
+
+        return $callback ? jsonp($result) : json($result);
+
     }
 
     /**
