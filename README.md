@@ -121,7 +121,7 @@ use think\Session;
 class ServiceController extends RpcController {
 
     function index() {
-        $this->handle('app\\service\\', function ($func, $params) {
+        return $this->handle('app\\service\\', function ($func, $params) {
             if (in_array(strtolower($func), ['user_login', 'user_logout'])) //登录方法不判断
                 return;
 
