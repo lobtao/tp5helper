@@ -1,3 +1,5 @@
+composer require lobtao/tp5helper
+-----
 Curl.php 使用示例
 -----
 
