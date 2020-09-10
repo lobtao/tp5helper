@@ -1,0 +1,24 @@
+{
+    "name": "lobtao/tp5helper",
+    "description": "thinkphp5 helper",
+    "type": "thinkphp5-helper",
+    "keywords": ["thinkphp5","extension"," curl", "RESTful","helper"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "lobtao",
+            "email": "lobtao@qq.com"
+        }
+    ],
+    "require": {
+        "ext-curl": "*"
+    },
+    "autoload": {
+        "files": [
+            "src/Helper.php"
+        ],
+        "psr-4": {
+            "lobtao\\tp5helper\\": "src/"
+        }
+    }
+}
