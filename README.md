@@ -1,3 +1,7 @@
+安装
+-----
+composer require lobtao/tp5helper
+
 Curl.php 使用示例
 -----
 
@@ -13,12 +17,12 @@ if ($curl->errorCode === null) {
 } else {
      // List of curl error codes here https://curl.haxx.se/libcurl/c/libcurl-errors.html
     switch ($curl->errorCode) {
-    
+
         case 6:
             //host unknown example
             break;
     }
-} 
+}
 ```
 
 ```php
@@ -34,7 +38,7 @@ $response = $curl->setGetParams([
 
 
 ```php
-// POST URL form-urlencoded 
+// POST URL form-urlencoded
 $curl = new Curl();
 $response = $curl->setPostParams([
         'key' => 'value',
@@ -86,14 +90,14 @@ $params = [
 $response = $curl->setRequestBody(json_encode($params))
      ->setOption(CURLOPT_ENCODING, 'gzip')
      ->post('http://example.com/');
-     
+
 // List of status codes here http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 switch ($curl->responseCode) {
 
     case 'timeout':
         //timeout error logic here
         break;
-        
+
     case 200:
         //success logic here
         break;
@@ -121,7 +125,7 @@ use think\Session;
 class ServiceController extends RpcController {
 
     function index() {
-        $this->handle('app\\service\\', function ($func, $params) {
+        return $this->handle('app\\service\\', function ($func, $params) {
             if (in_array(strtolower($func), ['user_login', 'user_logout'])) //登录方法不判断
                 return;
 
